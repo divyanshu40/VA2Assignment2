@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+
+</head>
+
+<body>
+
+  <form id="userWaitlistForm">
+    <h1>User Waitlist Form</h1>
+    <label for="inputFullName"><strong>Full Name: </strong></label>
+    <input type="text" id="inputFullName" />
+    <p id="noNameResponse"></p>
+    <br>
+    <label for="inputPhoneNumber"><strong>Phone Number: </strong></label>
+    <input type="text" id="inputPhoneNumber" />
+    <p id="invalidPhoneNumberResponse"></p>
+    <br>
+    <label for="inputEmailId"><strong>Email Id: </strong></label>
+    <input type="text" id="inputEmailId" />
+    <p id="invalidEmailResponse"></p>
+    <br>
+    <label><strong>Gender:</strong></label><br>
+    <label for="male"><input type="radio" id="male" name="Gender" value="Male" />Male</label><br>
+    <label for="female"><input type="radio" id="female" name="Gender" value="Female" />Female</label><br>
+    <label for="other"><input type="radio" id="other" name="Gender" value="Other" />Other</label><br>
+    <p id="noGenderSelectedResponse"></p>
+    <label><strong>Are you a college graduate?</strong></label><br>
+    <label for="yes"><input type="radio" id="yes" name="answer" value="Yes" />Yes</label><br>
+    <label for="no"><input type="radio" id="no" name="answer" value="No" />No</label><br>
+    <label for="dropout"><input type="radio" id="dropout" name="answer" value="Dropout" />Dropout</label><br>
+    <p id="noAnswerSelectedResponse"></p>
+    <label><strong>Are you working anywhere fulltime or partime?</strong></label><br>
+    <select id="workingStatusDropdown">
+      <option value="Working Full Time">Working Full Time</option>
+      <option value="Working Part Time">Working Part Time</option>
+      <option value="Not Working Anywhere">Not Working Anywhere</option>
+    </select>
+    <br><br>
+    <label for="inputAnswer"><strong>Why do you want to learn web development?</strong></label><br>
+    <textarea id="inputAnswer" rows="5" cols="50"></textarea>
+    <p id="noAnswerResponse"></p>
+    <br>
+    <label>How did you came to know about us?</label><br>
+    <label for="youtube"><input type="checkbox" id="youtube" name="socialMedia" value="Youtube" /> Youtube</label><br>
+    <label for="instagram"><input type="checkbox" id="instagram" name="socialMedia" value="Instagram" />
+      Instagram</label><br>
+    <label for="linkedin"><input type="checkbox" id="linkedin" name="socialMedia" value="LinkedIn" />
+      LinkedIn</label><br>
+    <label for="twitter"><input type="checkbox" id="twitter" name="socialMedia" value="Twitter" /> Twitter</label><br>
+    <label for="friends and family"><input type="checkbox" id="friends and family" name="socialMedia"
+        value="Friends and family" /> Friends and family</label><br>
+    <label for="others"><input type="checkbox" id="others" name="socialMedia" value="Others" /> Others</label><br>
+    <p id="noCheckboxSelectedResponse"></p>
+    <input type="checkbox" id="confirmationCheckbox" /> I confirm that all information in this form is factually true.
+    <br>
+    <p id="noConfirmCheckboxSelectedResponse"></p>
+    <input type="submit" value="submit" />
+  </form>
+  <div id="displayFormDetails"></div>
+
+  <script>
+
+    const userWaitlistForm = document.getElementById("userWaitlistForm")
+    userWaitlistForm.addEventListener("submit", function (event) {
+      event.preventDefault()
+
+      const fullName = document.getElementById("inputFullName").value
+      const noNameResponse = document.getElementById("noNameResponse")
+      if (fullName.length === 0) {
+        noNameResponse.textContent = "Please enter your full name."
+        noNameResponse.style.color = "red"
+      }
+      const phoneNumber = document.getElementById("inputPhoneNumber").value
+      const invalidPhoneNumberResponse = document.getElementById("invalidPhoneNumberResponse")
+      let phoneNumberInteger = parseInt(phoneNumber)
+      if ((phoneNumber.length > 10 || phoneNumber.length === 0) || ((typeof phoneNumberInteger) != "number")) {
+        invalidPhoneNumberResponse.textContent = "Please enter a valid phone number."
+        invalidPhoneNumberResponse.style.color = "red"
+      }
+      const emailId = document.getElementById("inputEmailId").value
+      const invalidEmailResponse = document.getElementById("invalidEmailResponse")
+      let indexOfAt = emailId.indexOf("@")
+      let indexOfDot = emailId.indexOf(".")
+      if ((emailId.length) === 0 || (indexOfAt < 0) || (indexOfDot < 0) || (indexOfAt > indexOfDot)) {
+        invalidEmailResponse.textContent = "Please enter a valid email-id."
+        invalidEmailResponse.style.color = "red"
+      }
+      const gender = document.querySelector('input[name="Gender"]:checked')
+      const noGenderSelectedResponse = document.getElementById("noGenderSelectedResponse")
+      if (!gender) {
+        noGenderSelectedResponse.textContent = "Please select a gender."
+        noGenderSelectedResponse.style.color = "red"
+      }
+      const answer = document.querySelector('input[name="answer"]:checked')
+      const noAnswerSelectedResponse = document.getElementById("noAnswerSelectedResponse")
+      if (!answer) {
+        noAnswerSelectedResponse.textContent = "Please select an option."
+        noAnswerSelectedResponse.style.color = "red"
+      }
+      const employementStatus = document.getElementById("workingStatusDropdown").value
+      const response = document.getElementById("inputAnswer").value
+      const noAnswerResponse = document.getElementById("noAnswerResponse")
+      if (response.length === 0) {
+        noAnswerResponse.textContent = "Please provide an answer"
+        noAnswerResponse.style.color = "red"
+      }
+      const responseCheckBoxes = document.querySelectorAll('input[name="socialMedia"]:checked')
+      const noCheckboxSelectedResponse = document.getElementById("noCheckboxSelectedResponse")
+      const selectedCheckboxesResponse = []
+      for (let i = 0; i < responseCheckBoxes.length; i++) {
+        selectedCheckboxesResponse.push(responseCheckBoxes[i].value)
+      }
+      if (selectedCheckboxesResponse.length === 0) {
+        noCheckboxSelectedResponse.textContent = "Please select atleast one answer"
+        noCheckboxSelectedResponse.style.color = "red"
+      }
+      const confirmationCheckbox = document.getElementById("confirmationCheckbox")
+      const noConfirmCheckboxSelectedResponse = document.getElementById("noConfirmCheckboxSelectedResponse")
+      if (!confirmationCheckbox.checked) {
+        noConfirmCheckboxSelectedResponse.textContent = "Please agree to the statement"
+        noConfirmCheckboxSelectedResponse.style.color = "red"
+      }
+
+      const displayFormDetails = document.getElementById("displayFormDetails")
+      displayFormDetails.innerHTML = `
+      <h2>Details Submitted</h2>
+      <p><strong>Name: </strong>${fullName}</p>
+      <p><strong>Phone Number: </strong>${phoneNumber}</p>
+<p><strong>Email Id: </strong>${emailId}</p>
+<p><strong>Gender: </strong>${gender.value}</p>
+<p><strong>Are you a college graduate? </strong>${answer.value}</p>
+<p><strong>Are you working anywhere fulltime or partime? </strong>${employementStatus}</p>
+<p><strong>Why do you want to learn web development? </strong>${response}</p>
+<p><strong>How did you came to know about us? </strong>${selectedCheckboxesResponse.join(", ")}</p>
+      `
+
+    })
+
+  </script>
+</body>
+
+</html>
